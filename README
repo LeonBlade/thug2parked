@@ -1,0 +1,10 @@
+THUG2 Park Editor
+
+This is a personal project I'm working on to create parks for THUG2 without using the in game editor, enabling you to do things like stacking and what not.
+
+Trying to keep this project straight C if I can just because I feel like it.
+Makefile currently is setup using frameworks because I'm on OS X.
+Some functions need to get their own files and an overall cleanup.
+This is still being worked on so not everything is as it will be later on.
+
+Some things to look at would be the structs for t2cap.
