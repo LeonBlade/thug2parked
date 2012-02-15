@@ -1,14 +1,17 @@
 CC=g++
-CFLAGS=-I.
-OBJ=main.o t2cap.o
-LIBS=-framework OpenGL -framework GLUT -framework libpng
-PROJECT=thug2parked
+CFLAGS=-c -Wall
+LDFLAGS=-framework OpenGL -framework GLUT -framework libpng
+SOURCES=main.c font.c camera.c draw.c t2cap.c texture.c
+OBJECTS=$(SOURCES:.c=.o)
+EXECUTABLE=thug2parked
 
-%.o: %.c
-	$(CC) -c -o $@ $< $(CFLAGS)
+all: $(SOURCES) $(EXECUTABLE)
+	
+$(EXECUTABLE): $(OBJECTS) 
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
-$(PROJECT): $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+.cpp.o:
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -rf *.o $(PROJECT)
+	rm -rf *.o $(EXECUTABLE)
