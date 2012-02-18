@@ -53,6 +53,7 @@ struct Cube
 	Quad right;
 };
 
+void create_quad(float x, float y, float w, float h);
 void draw_quad(Quad quad, float x = 0, float y = 0, float z = 0);
 void draw_qube(Cube cube, float x = 0, float y = 0, float z = 0);
 
