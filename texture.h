@@ -15,6 +15,6 @@ struct Texture
 	int height;
 };
 
-bool load_texture(Texture &_texture, const char *filename, bool alpha = true);
+bool load_texture(Texture &_texture, const char *filename, bool alpha = true, bool clamp = false);
 
 #endif

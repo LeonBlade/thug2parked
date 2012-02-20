@@ -1,7 +1,10 @@
 #include "camera.h"
 #include <stdio.h>
 
+#define ANG2RAD 3.14159265358979323846 / 180.0
+
 float dX = 0, dY = 0, dZ = 0, dAX = 0, dAY = 0, dAZ = 0, lookX = 0, lookY = 0, lookZ = 0;
+bool gotta_go_fast = false;
 
 void camera_new(Camera &camera, float x, float y, float z, float roll, float pitch, float yaw)
 {
@@ -20,7 +23,7 @@ void camera_new(Camera &camera, float x, float y, float z, float roll, float pit
 void camera_draw(Camera &camera, int delta)
 {
 	float moveSpeed = 10.0f * (delta / 1000.0f);
-	float cameraSpeed = 0.8f * (delta / 1000.0f);
+	float cameraSpeed = 1.0f * (delta / 1000.0f);
 
 	// reset values
 	if (camera.yaw > 360) camera.yaw -= 360;

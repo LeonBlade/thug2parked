@@ -1,6 +1,6 @@
 #include "texture.h"
 
-bool load_texture(Texture &_texture, const char *filename, bool alpha) 
+bool load_texture(Texture &_texture, const char *filename, bool alpha, bool clamp) 
 {
 //header for testing if it is a png
 png_byte header[8];
@@ -106,12 +106,13 @@ png_read_image(png_ptr, row_pointers);
 GLuint texture;
 glGenTextures(1, &texture);
 glBindTexture(GL_TEXTURE_2D, texture);
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_TEXTURE_MIN_FILTER);
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 //glTexImage2D(GL_TEXTURE_2D,0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*) image_data);
 gluBuild2DMipmaps(GL_TEXTURE_2D, 4, width, height, (alpha)?GL_RGBA:GL_RGB, GL_UNSIGNED_BYTE, image_data);
-glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 //clean up memory and close stuff
 png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
@@ -126,5 +127,4 @@ _texture.height = height;
 printf("Loaded texture \"%s\" at %i...\n", filename, _texture.texture);
 
 return true;
-
 }

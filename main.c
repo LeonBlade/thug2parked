@@ -4,7 +4,6 @@
 #include "gl.h"
 #include "camera.h"
 #include "texture.h"
-#include "draw.h"
 #include "font.h"
 #include "t2cap.h"
 
@@ -35,9 +34,7 @@ void draw_ground(float x, float z, int8_t h)
 	glPushMatrix();
 
 	// set the height
-	float y = 0.5f;
-
-	// translate to the position of cube
+	float y = 0.5;
 	glTranslatef(x, (float)h / 2, z);
 
 	// bind ground texture
@@ -64,76 +61,82 @@ void draw_ground(float x, float z, int8_t h)
     
     glEnd();
 
-   	// bind side texture
+    // bind side texture
     glBindTexture(GL_TEXTURE_2D, side.texture);
 
-    // front face
-    glBegin(GL_TRIANGLE_STRIP);		
-		glNormal3d(0, 0, 1);
+    for (int i = 0; i < abs(h); i++)
+    {
+    	// translate into position
+    	if (i != 0) glTranslatef(0, -y, 0);
 
-		glTexCoord2f(0.0f, 0.0f); 
-		glVertex3f(0, 0, 0);
+	    // front face
+	    glBegin(GL_TRIANGLE_STRIP);		
+			glNormal3d(0, 0, 1);
 
-		glTexCoord2f(0.0f, 1.0f); 
-		glVertex3f(0, y, 0);
+			glTexCoord2f(0.0f, 0.0f); 
+			glVertex3f(0, 0, 0);
 
-		glTexCoord2f(1.0f, 0.0f); 
-		glVertex3f(1, 0, 0);
+			glTexCoord2f(0.0f, 1.0f); 
+			glVertex3f(0, y, 0);
 
-		glTexCoord2f(1.0f, 1.0f); 
-		glVertex3f(1, y, 0);
-	glEnd();
+			glTexCoord2f(1.0f, 0.0f); 
+			glVertex3f(1, 0, 0);
 
-	// back face
-	glBegin(GL_TRIANGLE_STRIP);
-		glNormal3d(0, 0, -1);
+			glTexCoord2f(1.0f, 1.0f); 
+			glVertex3f(1, y, 0);
+		glEnd();
 
-		glTexCoord2f(1.0f, 0.0f); 
-		glVertex3f(0, 0, -1);
+		// back face
+		glBegin(GL_TRIANGLE_STRIP);
+			glNormal3d(0, 0, -1);
 
-		glTexCoord2f(1.0f, 1.0f); 
-		glVertex3f(0, y, -1);
+			glTexCoord2f(1.0f, 0.0f); 
+			glVertex3f(0, 0, -1);
 
-		glTexCoord2f(0.0f, 0.0f); 
-		glVertex3f(1, 0, -1);
+			glTexCoord2f(1.0f, 1.0f); 
+			glVertex3f(0, y, -1);
 
-		glTexCoord2f(0.0f, 1.0f); 
-		glVertex3f(1, y, -1);
-	glEnd();
+			glTexCoord2f(0.0f, 0.0f); 
+			glVertex3f(1, 0, -1);
 
-	// left face
-	glBegin(GL_TRIANGLE_STRIP);
-		glNormal3d(-1, 0, 0);
+			glTexCoord2f(0.0f, 1.0f); 
+			glVertex3f(1, y, -1);
+		glEnd();
 
-		glTexCoord2f(1.0f, 0.0f); 
-		glVertex3f(0, 0, 0);
+		// left face
+		glBegin(GL_TRIANGLE_STRIP);
+			glNormal3d(-1, 0, 0);
 
-		glTexCoord2f(1.0f, 1.0f); 
-		glVertex3f(0, y, 0);
+			glTexCoord2f(1.0f, 0.0f); 
+			glVertex3f(0, 0, 0);
 
-		glTexCoord2f(0.0f, 0.0f); 
-		glVertex3f(0, 0, -1);
+			glTexCoord2f(1.0f, 1.0f); 
+			glVertex3f(0, y, 0);
 
-		glTexCoord2f(0.0f, 1.0f); 
-		glVertex3f(0, y, -1);
-	glEnd();
+			glTexCoord2f(0.0f, 0.0f); 
+			glVertex3f(0, 0, -1);
 
-	// right face
-	glBegin(GL_TRIANGLE_STRIP);
-		glNormal3d(1, 0, 0);
+			glTexCoord2f(0.0f, 1.0f); 
+			glVertex3f(0, y, -1);
+		glEnd();
 
-		glTexCoord2f(0.0f, 0.0f); 
-		glVertex3f(1, 0, 0);
+		// right face
+		glBegin(GL_TRIANGLE_STRIP);
+			glNormal3d(1, 0, 0);
 
-		glTexCoord2f(0.0f, 1.0f); 
-		glVertex3f(1, y, 0);	  
+			glTexCoord2f(0.0f, 0.0f); 
+			glVertex3f(1, 0, 0);
 
-		glTexCoord2f(1.0f, 0.0f);   
-		glVertex3f(1, 0, -1);
+			glTexCoord2f(0.0f, 1.0f); 
+			glVertex3f(1, y, 0);	  
 
-		glTexCoord2f(1.0f, 1.0f); 
-		glVertex3f(1, y, -1);
-	glEnd();
+			glTexCoord2f(1.0f, 0.0f);   
+			glVertex3f(1, 0, -1);
+
+			glTexCoord2f(1.0f, 1.0f); 
+			glVertex3f(1, y, -1);
+		glEnd();
+	}
 
 	// pop the matrix back
 	glPopMatrix();
@@ -207,72 +210,13 @@ void draw()
 	last_draw = cur_time;
 
 	// set light position shit
-	GLfloat lpos[] = { 56.0f, 100.0f, 56.0f, 1.0f };
+	GLfloat lpos[] = { 56.0f, 30.0f, 56.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, lpos);
 
 	// draw the ground
 	for (int x = 0; x < 56; x++)
 		for (int z = 0; z < 0x39; z++)
 				draw_ground(x, z, t2ground[x].column[z]);
-
-	glDisable(GL_LIGHTING);
-	glScalef(500.0f, 500.0f, 500.0f);
-
-	glBindTexture(GL_TEXTURE_2D, skybox_top.texture);
-	glBegin(GL_QUADS);
-		glNormal3d(0, 1, 0);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1, 1,-1);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( 1, 1,-1);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( 1, 1, 1);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(-1, 1, 1);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, skybox_bottom.texture);
-	glBegin(GL_QUADS);
-		glNormal3d(0,-1, 0);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1,-1,-1);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( 1,-1,-1);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( 1,-1, 1);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1,-1, 1);
-	glEnd();
-	
-	glBindTexture(GL_TEXTURE_2D, skybox_back.texture);
-	glBegin(GL_QUADS);
-		glNormal3d(0, 0, 1);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1,-1,-1);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( 1,-1,-1);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( 1, 1,-1);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1, 1,-1);
-	glEnd();
-	
-	glBindTexture(GL_TEXTURE_2D, skybox_front.texture);
-	glBegin(GL_QUADS);
-		glNormal3d(0, 0,-1);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1,-1, 1);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( 1,-1, 1);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( 1, 1, 1);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(-1, 1, 1);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, skybox_left.texture);
-	glBegin(GL_QUADS);
-		glNormal3d( 1, 0, 0);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1,-1,-1);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1,-1, 1);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(-1, 1, 1);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(-1, 1,-1);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, skybox_right.texture);	
-	glBegin(GL_QUADS);
-		glNormal3d(-1, 0, 0);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f( 1,-1,-1);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f( 1,-1, 1);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f( 1, 1, 1);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f( 1, 1,-1);
-	glEnd();	
-	glScalef(1.0f, 1.0f, 1.0f);
-	glEnable(GL_LIGHTING);
 
 	// swap buffers
 	glutSwapBuffers();
@@ -321,8 +265,6 @@ void resize(int w, int h)
 	glViewport(0, 0, w, h);
 	// set perspective
 	gluPerspective(45, ratio, 1, 1000);
-	// set frustum
-	//glFrustum(1, -1, -1, 1, 1, 100);
 
 	// go back to modelview
 	glMatrixMode(GL_MODELVIEW);
@@ -348,9 +290,6 @@ void init(int argc, char *argv[])
 	if (argc > 1) t2ground = load_cap(argv[1]);
 	else t2ground = load_cap("parks/grd.PRK");
 
-	// init font
-	init_font();
-
 	// set camera
 	camera_new(camera, 32.0f, 10.0f, 32.0f);
 
@@ -358,12 +297,6 @@ void init(int argc, char *argv[])
 	load_texture(ground, "textures/ground.png");
 	load_texture(side, "textures/side.png");
 	load_texture(font, "textures/font.png");
-	load_texture(skybox_top, "textures/up.png", false);
-	load_texture(skybox_bottom, "textures/down.png", false);
-	load_texture(skybox_front, "textures/front.png", false);
-	load_texture(skybox_back, "textures/back.png", false);
-	load_texture(skybox_left, "textures/left.png", false);
-	load_texture(skybox_right, "textures/right.png", false);
 }
 
 int main(int argc, char *argv[])
@@ -385,7 +318,7 @@ int main(int argc, char *argv[])
 
 	// enable stuff
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_STENCIL_TEST);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_COLOR_MATERIAL);	
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);	
