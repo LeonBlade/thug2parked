@@ -6,7 +6,7 @@
 #include "gl.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <libpng/png.h>
+#include <libpng16/png.h>
 
 struct Texture
 {

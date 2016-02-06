@@ -1,19 +1,17 @@
 CC=g++
 CFLAGS=-c -Wall
-LDFLAGS=-framework OpenGL -framework GLUT -framework libpng
+LDFLAGS=-framework OpenGL -framework GLUT -lpng
 SOURCES=main.c \
 		camera.c \
 		font.c \
-		frustum.c \
 		t2cap.c \
-		texture.c \
-		vector.c
+		texture.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=thug2parked
 
 all: $(SOURCES) $(EXECUTABLE)
-	
-$(EXECUTABLE): $(OBJECTS) 
+
+$(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
 .cpp.o:
